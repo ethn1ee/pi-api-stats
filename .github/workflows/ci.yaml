@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-docker-publish-workflow:
+  build-and-publish:
     permissions:
       contents: read
       packages: write
@@ -15,3 +15,22 @@ jobs:
     with:
       image_name: pi-stats-api
     secrets: inherit
+
+  update-pointer:
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Submodule Sync Workflow
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'ethn1ee',
+              repo: 'pi',
+              workflow_id: 'sync-submodule.yaml',
+              ref: 'main',
+              inputs: {
+                app_path: 'apps/api/stats'
+              }
+            });
