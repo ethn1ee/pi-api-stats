@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   call-docker-publish-workflow:
+    permissions:
+      contents: read
+      packages: write
     uses: ethn1ee/pi/.github/workflows/docker-publish.yaml@main
     with:
-      image_name: pi-api-stats
+      image_name: pi-stats-api
     secrets: inherit
