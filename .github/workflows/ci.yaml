@@ -1,0 +1,13 @@
+name: Stats API CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-docker-publish-workflow:
+    uses: ethn1ee/pi/.github/workflows/docker-publish.yaml@main
+    with:
+      image_name: pi-api-stats
+    secrets: inherit
