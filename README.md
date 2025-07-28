@@ -1,4 +1,4 @@
-# Raspberry Pi Stats SSE Server
+# Pi Stats API
 
 A SSE (Server-Sent Events) server that provides a real-time monitoring of cpu, disk, memory, etc. every second, utilizing the `gopsutil` package. The server is built for a personal use for monitoring the Raspberry Pi's system resources, but it can be easily adapted for any other platforms.
 
@@ -7,9 +7,7 @@ A SSE (Server-Sent Events) server that provides a real-time monitoring of cpu, d
 ```json
 {
   "cpu": [
-    0.9999999996844054,
-    1.9801980194952786,
-    1.9801980198483422,
+    0.9999999996844054, 1.9801980194952786, 1.9801980198483422,
     0.9999999998399289
   ],
   "disk": {
@@ -37,5 +35,4 @@ A SSE (Server-Sent Events) server that provides a real-time monitoring of cpu, d
     "nvmeTemperature": 50.85
   }
 }
-
 ```
