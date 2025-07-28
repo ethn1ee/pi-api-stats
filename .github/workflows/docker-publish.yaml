@@ -25,6 +25,5 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./stats # The directory where your Dockerfile is located.
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
