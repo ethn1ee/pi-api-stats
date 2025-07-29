@@ -22,7 +22,7 @@ func StatsHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		select {
 		case <-r.Context().Done():
-			log.Println("Client disconnected")
+			log.Printf("Client connection closed: %v", r.Context().Err())
 			return
 		case <-t.C:
 			stats := stats.GetStats(r.Context())
