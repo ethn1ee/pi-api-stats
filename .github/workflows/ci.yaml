@@ -7,12 +7,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-publish:
-    name: Call Docker Publish
+  release:
+    name: Call Release Workflow
     permissions:
       contents: read
       packages: write
     uses: ethn1ee/pi/.github/workflows/docker-publish.yaml@main
     with:
+      deployment: pi-api-stats
+      namespace: pi-api-stats
       image_name: pi-api-stats
     secrets: inherit
