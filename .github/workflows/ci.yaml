@@ -17,4 +17,5 @@ jobs:
       deployment: pi-api-stats
       namespace: pi-api-stats
       image_name: pi-api-stats
+      image_tag: ${{ github.sha }}
     secrets: inherit
