@@ -6,8 +6,10 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
+COPY proto ./proto
 RUN go generate ./...
+COPY cmd ./cmd
+COPY internal ./internal
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app/server ./cmd/main.go
 
 # --- distroless ---

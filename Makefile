@@ -1,4 +1,7 @@
-.PHONY: proto a
+.PHONY: run proto
+
+run:
+	@go run ./cmd/main.go
 
 proto:
 	@export PATH="$PATH:/Users/ethantlee/go/bin"

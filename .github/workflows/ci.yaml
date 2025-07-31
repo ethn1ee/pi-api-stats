@@ -14,8 +14,7 @@ jobs:
       packages: write
     uses: ethn1ee/pi/.github/workflows/release.yaml@main
     with:
-      deployment: pi-api-stats
-      namespace: pi-api-stats
+      chart_path: charts/api/stats
       image_name: pi-api-stats
       image_tag: ${{ github.sha }}
     secrets: inherit
