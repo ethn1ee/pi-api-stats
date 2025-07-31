@@ -13,6 +13,10 @@ type DiskStat struct {
 	UsedPercent float64 `json:"usedPercent"`
 }
 
+func GetDiskStat(ctx context.Context) (DiskStat, error) {
+	return getDiskStat(ctx)
+}
+
 func getDiskStat(ctx context.Context) (DiskStat, error) {
 	stat, err := disk.UsageWithContext(ctx, "/")
 	if err != nil {

@@ -13,6 +13,10 @@ type MemoryStat struct {
 	UsedPercent float64 `json:"used_percent"`
 }
 
+func GetMemoryStat(ctx context.Context) (MemoryStat, error) {
+	return getMemoryStat(ctx)
+}
+
 func getMemoryStat(ctx context.Context) (MemoryStat, error) {
 	stat, err := mem.VirtualMemoryWithContext(ctx)
 	if err != nil {

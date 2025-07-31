@@ -7,8 +7,12 @@ import (
 )
 
 type TemperatureStat struct {
-	CPU  float64 `json:"cpuTemperature"`
-	NVME float64 `json:"nvmeTemperature"`
+	Cpu  float64 `json:"cpuTemperature"`
+	Nvme float64 `json:"nvmeTemperature"`
+}
+
+func GetTemperatureStat(ctx context.Context) (TemperatureStat, error) {
+	return getTemperatureStat(ctx)
 }
 
 func getTemperatureStat(ctx context.Context) (TemperatureStat, error) {
@@ -29,7 +33,7 @@ func getTemperatureStat(ctx context.Context) (TemperatureStat, error) {
 	}
 
 	return TemperatureStat{
-		CPU:  cpuTemp,
-		NVME: nvmeTemp,
+		Cpu:  cpuTemp,
+		Nvme: nvmeTemp,
 	}, nil
 }

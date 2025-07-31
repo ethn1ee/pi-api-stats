@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package stats;
+
+option go_package = "pi/stats/proto";
+
+service Stats {
+  // Unary RPCs for individual stats
+  rpc GetCpu(Empty) returns (CpuResponse) {}
+  rpc GetDisk(Empty) returns (DiskResponse) {}
+  rpc GetHost(Empty) returns (HostResponse) {}
+  rpc GetMemory(Empty) returns (MemoryResponse) {}
+  rpc GetTemperature(Empty) returns (TemperatureResponse) {}
+
+  // Server-side streaming RPC for all stats
+  rpc StreamAllStats(Empty) returns (stream AllStats) {}
+}
+
+message Empty {}
+
+// Aggregate message for the stream
+message AllStats {
+  CpuResponse cpu = 1;
+  DiskResponse disk = 2;
+  HostResponse host = 3;
+  MemoryResponse memory = 4;
+  TemperatureResponse temperature = 5;
+}
+
+message CpuResponse {
+  repeated double data = 1;
+}
+
+message DiskResponse {
+  uint64 total = 1;
+  uint64 free = 2;
+  uint64 used = 3;
+  double used_percent = 4;
+}
+
+message HostResponse {
+  uint64 boot_time = 1;
+  uint64 uptime = 2;
+  uint64 processes = 3;
+  string os = 4;
+  string platform = 5;
+  string architecture = 6;
+}
+
+message MemoryResponse {
+  uint64 total = 1;
+  uint64 available = 2;
+  uint64 used = 3;
+  double used_percent = 4;
+}
+
+message TemperatureResponse {
+  double cpu = 1;
+  double nvme = 2;
+}

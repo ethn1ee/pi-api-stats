@@ -10,9 +10,13 @@ type HostStat struct {
 	BootTime     uint64 `json:"bootTime"`
 	Uptime       uint64 `json:"uptime"`
 	Processes    uint64 `json:"processes"`
-	OS           string `json:"os"`
+	Os           string `json:"os"`
 	Platform     string `json:"platform"`
 	Architecture string `json:"architecture"`
+}
+
+func GetHostStat(ctx context.Context) (HostStat, error) {
+	return getHostStat(ctx)
 }
 
 func getHostStat(ctx context.Context) (HostStat, error) {
@@ -26,7 +30,7 @@ func getHostStat(ctx context.Context) (HostStat, error) {
 		BootTime:     infoStat.BootTime,
 		Uptime:       infoStat.Uptime,
 		Processes:    infoStat.Procs,
-		OS:           infoStat.OS,
+		Os:           infoStat.OS,
 		Platform:     infoStat.Platform,
 		Architecture: infoStat.KernelArch,
 	}, nil
