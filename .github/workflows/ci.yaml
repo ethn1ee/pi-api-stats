@@ -10,7 +10,6 @@ jobs:
   release:
     name: Call Release Workflow
     permissions:
-      contents: read
       contents: write
       packages: write
     uses: ethn1ee/pi/.github/workflows/release.yaml@main
