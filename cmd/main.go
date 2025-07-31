@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/lmittmann/tint"
@@ -13,6 +14,8 @@ import (
 	grpchandler "pi/stats/internal/grpc"
 	pb "pi/stats/proto"
 )
+
+const PORT = 50051
 
 func main() {
 	w := os.Stderr
@@ -24,7 +27,7 @@ func main() {
 		}),
 	))
 
-	lis, err := net.Listen("tcp", ":8080")
+	lis, err := net.Listen("tcp", ":"+strconv.Itoa(PORT))
 	if err != nil {
 		slog.Error("failed to listen", slog.Any("error", err))
 	}
@@ -33,7 +36,7 @@ func main() {
 	pb.RegisterStatsServer(s, &grpchandler.Server{})
 	reflection.Register(s)
 
-	slog.Info("Server starting...", "address", ":8080")
+	slog.Info("Server starting", "port", PORT)
 	if err := s.Serve(lis); err != nil {
 		slog.Error("failed to serve", slog.Any("error", err))
 	}

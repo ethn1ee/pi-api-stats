@@ -14,10 +14,6 @@ type MemoryStat struct {
 }
 
 func GetMemoryStat(ctx context.Context) (MemoryStat, error) {
-	return getMemoryStat(ctx)
-}
-
-func getMemoryStat(ctx context.Context) (MemoryStat, error) {
 	stat, err := mem.VirtualMemoryWithContext(ctx)
 	if err != nil {
 		return MemoryStat{}, err

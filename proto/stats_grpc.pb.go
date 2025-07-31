@@ -22,14 +22,11 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StatsClient interface {
-	// Unary RPCs for individual stats
-	GetCpu(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CpuResponse, error)
-	GetDisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DiskResponse, error)
-	GetHost(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HostResponse, error)
-	GetMemory(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MemoryResponse, error)
-	GetTemperature(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TemperatureResponse, error)
-	// Server-side streaming RPC for all stats
-	StreamAllStats(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamAllStatsClient, error)
+	StreamCpu(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamCpuClient, error)
+	StreamDisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamDiskClient, error)
+	StreamHost(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamHostClient, error)
+	StreamMemory(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamMemoryClient, error)
+	StreamTemperature(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamTemperatureClient, error)
 }
 
 type statsClient struct {
@@ -40,57 +37,12 @@ func NewStatsClient(cc grpc.ClientConnInterface) StatsClient {
 	return &statsClient{cc}
 }
 
-func (c *statsClient) GetCpu(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CpuResponse, error) {
-	out := new(CpuResponse)
-	err := c.cc.Invoke(ctx, "/stats.Stats/GetCpu", in, out, opts...)
+func (c *statsClient) StreamCpu(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamCpuClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[0], "/stats.Stats/StreamCpu", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
-}
-
-func (c *statsClient) GetDisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DiskResponse, error) {
-	out := new(DiskResponse)
-	err := c.cc.Invoke(ctx, "/stats.Stats/GetDisk", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) GetHost(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*HostResponse, error) {
-	out := new(HostResponse)
-	err := c.cc.Invoke(ctx, "/stats.Stats/GetHost", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) GetMemory(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MemoryResponse, error) {
-	out := new(MemoryResponse)
-	err := c.cc.Invoke(ctx, "/stats.Stats/GetMemory", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) GetTemperature(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TemperatureResponse, error) {
-	out := new(TemperatureResponse)
-	err := c.cc.Invoke(ctx, "/stats.Stats/GetTemperature", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *statsClient) StreamAllStats(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamAllStatsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[0], "/stats.Stats/StreamAllStats", opts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &statsStreamAllStatsClient{stream}
+	x := &statsStreamCpuClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -100,17 +52,145 @@ func (c *statsClient) StreamAllStats(ctx context.Context, in *Empty, opts ...grp
 	return x, nil
 }
 
-type Stats_StreamAllStatsClient interface {
-	Recv() (*AllStats, error)
+type Stats_StreamCpuClient interface {
+	Recv() (*CpuResponse, error)
 	grpc.ClientStream
 }
 
-type statsStreamAllStatsClient struct {
+type statsStreamCpuClient struct {
 	grpc.ClientStream
 }
 
-func (x *statsStreamAllStatsClient) Recv() (*AllStats, error) {
-	m := new(AllStats)
+func (x *statsStreamCpuClient) Recv() (*CpuResponse, error) {
+	m := new(CpuResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *statsClient) StreamDisk(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamDiskClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[1], "/stats.Stats/StreamDisk", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &statsStreamDiskClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Stats_StreamDiskClient interface {
+	Recv() (*DiskResponse, error)
+	grpc.ClientStream
+}
+
+type statsStreamDiskClient struct {
+	grpc.ClientStream
+}
+
+func (x *statsStreamDiskClient) Recv() (*DiskResponse, error) {
+	m := new(DiskResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *statsClient) StreamHost(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamHostClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[2], "/stats.Stats/StreamHost", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &statsStreamHostClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Stats_StreamHostClient interface {
+	Recv() (*HostResponse, error)
+	grpc.ClientStream
+}
+
+type statsStreamHostClient struct {
+	grpc.ClientStream
+}
+
+func (x *statsStreamHostClient) Recv() (*HostResponse, error) {
+	m := new(HostResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *statsClient) StreamMemory(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamMemoryClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[3], "/stats.Stats/StreamMemory", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &statsStreamMemoryClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Stats_StreamMemoryClient interface {
+	Recv() (*MemoryResponse, error)
+	grpc.ClientStream
+}
+
+type statsStreamMemoryClient struct {
+	grpc.ClientStream
+}
+
+func (x *statsStreamMemoryClient) Recv() (*MemoryResponse, error) {
+	m := new(MemoryResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *statsClient) StreamTemperature(ctx context.Context, in *Empty, opts ...grpc.CallOption) (Stats_StreamTemperatureClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Stats_ServiceDesc.Streams[4], "/stats.Stats/StreamTemperature", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &statsStreamTemperatureClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Stats_StreamTemperatureClient interface {
+	Recv() (*TemperatureResponse, error)
+	grpc.ClientStream
+}
+
+type statsStreamTemperatureClient struct {
+	grpc.ClientStream
+}
+
+func (x *statsStreamTemperatureClient) Recv() (*TemperatureResponse, error) {
+	m := new(TemperatureResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -121,14 +201,11 @@ func (x *statsStreamAllStatsClient) Recv() (*AllStats, error) {
 // All implementations must embed UnimplementedStatsServer
 // for forward compatibility
 type StatsServer interface {
-	// Unary RPCs for individual stats
-	GetCpu(context.Context, *Empty) (*CpuResponse, error)
-	GetDisk(context.Context, *Empty) (*DiskResponse, error)
-	GetHost(context.Context, *Empty) (*HostResponse, error)
-	GetMemory(context.Context, *Empty) (*MemoryResponse, error)
-	GetTemperature(context.Context, *Empty) (*TemperatureResponse, error)
-	// Server-side streaming RPC for all stats
-	StreamAllStats(*Empty, Stats_StreamAllStatsServer) error
+	StreamCpu(*Empty, Stats_StreamCpuServer) error
+	StreamDisk(*Empty, Stats_StreamDiskServer) error
+	StreamHost(*Empty, Stats_StreamHostServer) error
+	StreamMemory(*Empty, Stats_StreamMemoryServer) error
+	StreamTemperature(*Empty, Stats_StreamTemperatureServer) error
 	mustEmbedUnimplementedStatsServer()
 }
 
@@ -136,23 +213,20 @@ type StatsServer interface {
 type UnimplementedStatsServer struct {
 }
 
-func (UnimplementedStatsServer) GetCpu(context.Context, *Empty) (*CpuResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCpu not implemented")
+func (UnimplementedStatsServer) StreamCpu(*Empty, Stats_StreamCpuServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamCpu not implemented")
 }
-func (UnimplementedStatsServer) GetDisk(context.Context, *Empty) (*DiskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDisk not implemented")
+func (UnimplementedStatsServer) StreamDisk(*Empty, Stats_StreamDiskServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamDisk not implemented")
 }
-func (UnimplementedStatsServer) GetHost(context.Context, *Empty) (*HostResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetHost not implemented")
+func (UnimplementedStatsServer) StreamHost(*Empty, Stats_StreamHostServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamHost not implemented")
 }
-func (UnimplementedStatsServer) GetMemory(context.Context, *Empty) (*MemoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMemory not implemented")
+func (UnimplementedStatsServer) StreamMemory(*Empty, Stats_StreamMemoryServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamMemory not implemented")
 }
-func (UnimplementedStatsServer) GetTemperature(context.Context, *Empty) (*TemperatureResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTemperature not implemented")
-}
-func (UnimplementedStatsServer) StreamAllStats(*Empty, Stats_StreamAllStatsServer) error {
-	return status.Errorf(codes.Unimplemented, "method StreamAllStats not implemented")
+func (UnimplementedStatsServer) StreamTemperature(*Empty, Stats_StreamTemperatureServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamTemperature not implemented")
 }
 func (UnimplementedStatsServer) mustEmbedUnimplementedStatsServer() {}
 
@@ -167,114 +241,108 @@ func RegisterStatsServer(s grpc.ServiceRegistrar, srv StatsServer) {
 	s.RegisterService(&Stats_ServiceDesc, srv)
 }
 
-func _Stats_GetCpu_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).GetCpu(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.Stats/GetCpu",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).GetCpu(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_GetDisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).GetDisk(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.Stats/GetDisk",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).GetDisk(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_GetHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).GetHost(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.Stats/GetHost",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).GetHost(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_GetMemory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).GetMemory(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.Stats/GetMemory",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).GetMemory(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_GetTemperature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StatsServer).GetTemperature(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.Stats/GetTemperature",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServer).GetTemperature(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Stats_StreamAllStats_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Stats_StreamCpu_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(StatsServer).StreamAllStats(m, &statsStreamAllStatsServer{stream})
+	return srv.(StatsServer).StreamCpu(m, &statsStreamCpuServer{stream})
 }
 
-type Stats_StreamAllStatsServer interface {
-	Send(*AllStats) error
+type Stats_StreamCpuServer interface {
+	Send(*CpuResponse) error
 	grpc.ServerStream
 }
 
-type statsStreamAllStatsServer struct {
+type statsStreamCpuServer struct {
 	grpc.ServerStream
 }
 
-func (x *statsStreamAllStatsServer) Send(m *AllStats) error {
+func (x *statsStreamCpuServer) Send(m *CpuResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Stats_StreamDisk_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StatsServer).StreamDisk(m, &statsStreamDiskServer{stream})
+}
+
+type Stats_StreamDiskServer interface {
+	Send(*DiskResponse) error
+	grpc.ServerStream
+}
+
+type statsStreamDiskServer struct {
+	grpc.ServerStream
+}
+
+func (x *statsStreamDiskServer) Send(m *DiskResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Stats_StreamHost_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StatsServer).StreamHost(m, &statsStreamHostServer{stream})
+}
+
+type Stats_StreamHostServer interface {
+	Send(*HostResponse) error
+	grpc.ServerStream
+}
+
+type statsStreamHostServer struct {
+	grpc.ServerStream
+}
+
+func (x *statsStreamHostServer) Send(m *HostResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Stats_StreamMemory_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StatsServer).StreamMemory(m, &statsStreamMemoryServer{stream})
+}
+
+type Stats_StreamMemoryServer interface {
+	Send(*MemoryResponse) error
+	grpc.ServerStream
+}
+
+type statsStreamMemoryServer struct {
+	grpc.ServerStream
+}
+
+func (x *statsStreamMemoryServer) Send(m *MemoryResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Stats_StreamTemperature_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StatsServer).StreamTemperature(m, &statsStreamTemperatureServer{stream})
+}
+
+type Stats_StreamTemperatureServer interface {
+	Send(*TemperatureResponse) error
+	grpc.ServerStream
+}
+
+type statsStreamTemperatureServer struct {
+	grpc.ServerStream
+}
+
+func (x *statsStreamTemperatureServer) Send(m *TemperatureResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -284,32 +352,31 @@ func (x *statsStreamAllStatsServer) Send(m *AllStats) error {
 var Stats_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "stats.Stats",
 	HandlerType: (*StatsServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetCpu",
-			Handler:    _Stats_GetCpu_Handler,
-		},
-		{
-			MethodName: "GetDisk",
-			Handler:    _Stats_GetDisk_Handler,
-		},
-		{
-			MethodName: "GetHost",
-			Handler:    _Stats_GetHost_Handler,
-		},
-		{
-			MethodName: "GetMemory",
-			Handler:    _Stats_GetMemory_Handler,
-		},
-		{
-			MethodName: "GetTemperature",
-			Handler:    _Stats_GetTemperature_Handler,
-		},
-	},
+	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "StreamAllStats",
-			Handler:       _Stats_StreamAllStats_Handler,
+			StreamName:    "StreamCpu",
+			Handler:       _Stats_StreamCpu_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "StreamDisk",
+			Handler:       _Stats_StreamDisk_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "StreamHost",
+			Handler:       _Stats_StreamHost_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "StreamMemory",
+			Handler:       _Stats_StreamMemory_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "StreamTemperature",
+			Handler:       _Stats_StreamTemperature_Handler,
 			ServerStreams: true,
 		},
 	},

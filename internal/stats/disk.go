@@ -14,10 +14,6 @@ type DiskStat struct {
 }
 
 func GetDiskStat(ctx context.Context) (DiskStat, error) {
-	return getDiskStat(ctx)
-}
-
-func getDiskStat(ctx context.Context) (DiskStat, error) {
 	stat, err := disk.UsageWithContext(ctx, "/")
 	if err != nil {
 		return DiskStat{}, err

@@ -12,10 +12,6 @@ type TemperatureStat struct {
 }
 
 func GetTemperatureStat(ctx context.Context) (TemperatureStat, error) {
-	return getTemperatureStat(ctx)
-}
-
-func getTemperatureStat(ctx context.Context) (TemperatureStat, error) {
 	stat, err := host.SensorsTemperaturesWithContext(ctx)
 	if err != nil {
 		return TemperatureStat{}, err

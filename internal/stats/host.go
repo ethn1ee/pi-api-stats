@@ -16,10 +16,6 @@ type HostStat struct {
 }
 
 func GetHostStat(ctx context.Context) (HostStat, error) {
-	return getHostStat(ctx)
-}
-
-func getHostStat(ctx context.Context) (HostStat, error) {
 	host.EnableBootTimeCache(true)
 	infoStat, err := host.InfoWithContext(ctx)
 	if err != nil {

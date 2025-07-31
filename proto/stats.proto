@@ -5,30 +5,18 @@ package stats;
 option go_package = "pi/stats/proto";
 
 service Stats {
-  // Unary RPCs for individual stats
-  rpc GetCpu(Empty) returns (CpuResponse) {}
-  rpc GetDisk(Empty) returns (DiskResponse) {}
-  rpc GetHost(Empty) returns (HostResponse) {}
-  rpc GetMemory(Empty) returns (MemoryResponse) {}
-  rpc GetTemperature(Empty) returns (TemperatureResponse) {}
-
-  // Server-side streaming RPC for all stats
-  rpc StreamAllStats(Empty) returns (stream AllStats) {}
+  rpc StreamCpu(Empty) returns (stream CpuResponse) {}
+  rpc StreamDisk(Empty) returns (stream DiskResponse) {}
+  rpc StreamHost(Empty) returns (stream HostResponse) {}
+  rpc StreamMemory(Empty) returns (stream MemoryResponse) {}
+  rpc StreamTemperature(Empty) returns (stream TemperatureResponse) {}
 }
 
 message Empty {}
 
-// Aggregate message for the stream
-message AllStats {
-  CpuResponse cpu = 1;
-  DiskResponse disk = 2;
-  HostResponse host = 3;
-  MemoryResponse memory = 4;
-  TemperatureResponse temperature = 5;
-}
-
 message CpuResponse {
-  repeated double data = 1;
+  repeated double percent = 1;
+  double clock = 2;
 }
 
 message DiskResponse {

@@ -2,29 +2,23 @@ package stats
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/shirou/gopsutil/v3/cpu"
 )
 
-type CpuStat []float64
-
-func GetCpuStat(ctx context.Context) (CpuStat, error) {
-	return getCpuStat(ctx)
+type CpuStat struct {
+	Percent []float64
+	Clock   float64
 }
 
-func getCpuStat(ctx context.Context) (CpuStat, error) {
-	info, err := cpu.InfoWithContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	slog.Info("cpu info", "info", info)
-
+func GetCpuStat(ctx context.Context) (CpuStat, error) {
 	percent, err := cpu.PercentWithContext(ctx, 0, true)
 	if err != nil {
-		return nil, err
+		return CpuStat{}, err
 	}
 
-	return CpuStat(percent), nil
+	return CpuStat{
+		Percent: percent,
+		Clock:   cpu.ClocksPerSec,
+	}, nil
 }
