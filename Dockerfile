@@ -6,7 +6,7 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 COPY go.mod go.sum ./
 RUN go mod download
-COPY proto ./proto/api-stats
+COPY proto/api-stats ./proto
 RUN go generate ./...
 COPY cmd ./cmd
 COPY internal ./internal
