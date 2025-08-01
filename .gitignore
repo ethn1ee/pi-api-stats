@@ -2,5 +2,5 @@ vendor/
 .env
 
 # --- protobuf ---
-*.pb.go
-*_grpc.pb.go
+**/*.pb.go
+**/*_grpc.pb.go
