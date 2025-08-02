@@ -1,8 +1,6 @@
 # --- builder ---
 FROM golang:1.24.5-alpine AS builder
 WORKDIR /app
-# COPY go.mod go.sum ./
-# COPY ./proto ./proto
 COPY . .
 RUN go mod vendor
 RUN CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o /app/server ./cmd/main.go
