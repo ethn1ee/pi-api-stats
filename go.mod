@@ -1,4 +1,4 @@
-module pi/stats
+module pi/api/stats
 
 go 1.24.5
 

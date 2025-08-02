@@ -3,8 +3,9 @@ package grpc
 import (
 	"context"
 	"log/slog"
-	"pi/stats/internal/stats"
-	pb "pi/stats/proto"
+
+	"pi/api/stats/internal/stats"
+	pb "pi/api/stats/proto/api-stats"
 	"time"
 
 	"google.golang.org/grpc"
