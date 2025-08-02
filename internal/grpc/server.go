@@ -3,12 +3,12 @@ package grpc
 import (
 	"context"
 	"log/slog"
-
-	"pi/api/stats/internal/stats"
-	pb "github.com/ethn1ee/pi-protos/gen/go/stats"
 	"time"
 
 	"google.golang.org/grpc"
+
+	"github.com/ethn1ee/pi-api-stats/internal/stats"
+	pb "github.com/ethn1ee/pi-protos/gen/go/api-stats"
 )
 
 type Server struct {

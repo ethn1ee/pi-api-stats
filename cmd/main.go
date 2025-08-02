@@ -11,8 +11,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	grpchandler "pi/stats/internal/grpc"
-	pb "pi/stats/proto"
+	grpchandler "github.com/ethn1ee/pi-api-stats/internal/grpc"
+	pb "github.com/ethn1ee/pi-protos/gen/go/api-stats"
 )
 
 const PORT = 50051

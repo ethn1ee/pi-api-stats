@@ -1,8 +1,9 @@
-module github.com/ethn1ee/pi-protos
+module github.com/ethn1ee/pi-api-stats
 
 go 1.24.5
 
 require (
+	github.com/ethn1ee/pi-protos v0.0.0-00010101000000-000000000000
 	github.com/lmittmann/tint v1.1.2
 	github.com/shirou/gopsutil/v3 v3.24.5
 	google.golang.org/grpc v1.74.2
@@ -22,3 +23,5 @@ require (
 	golang.org/x/text v0.25.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250528174236-200df99c418a // indirect
 )
+
+replace github.com/ethn1ee/pi-protos => ./proto
