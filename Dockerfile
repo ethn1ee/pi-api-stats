@@ -2,12 +2,10 @@
 FROM golang:1.24.5-alpine AS builder
 RUN apk add --no-cache git protobuf-dev
 WORKDIR /app
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 COPY go.mod go.sum ./
 RUN go mod download
-COPY proto/api-stats ./proto
-RUN go generate ./...
+RUN go generate ./internal/...
 COPY cmd ./cmd
 COPY internal ./internal
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app/server ./cmd/main.go
