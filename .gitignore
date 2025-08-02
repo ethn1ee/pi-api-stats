@@ -4,3 +4,4 @@ vendor/
 # --- protobuf ---
 **/*.pb.go
 **/*_grpc.pb.go
+gen/

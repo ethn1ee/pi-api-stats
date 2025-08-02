@@ -5,7 +5,7 @@ import (
 	"log/slog"
 
 	"pi/api/stats/internal/stats"
-	pb "pi/api/stats/proto/api-stats"
+	pb "github.com/ethn1ee/pi-protos/gen/go/stats"
 	"time"
 
 	"google.golang.org/grpc"

@@ -1,4 +1,4 @@
-module pi/api/stats
+module github.com/ethn1ee/pi-protos
 
 go 1.24.5
 
