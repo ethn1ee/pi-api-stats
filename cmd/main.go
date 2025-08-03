@@ -49,15 +49,10 @@ func main() {
 	})
 	handlerWithCors := c.Handler(h2c.NewHandler(mux, &http2.Server{}))
 
-	addr := fmt.Sprintf("localhost:%d", PORT)
+	addr := fmt.Sprintf("0.0.0.0:%d", PORT)
 	slog.Info("server starting", "addr", addr)
 
-	err := http.ListenAndServe(
-		addr,
-		handlerWithCors,
-	)
-
-	if err != nil {
+	if err := http.ListenAndServe(addr, handlerWithCors); err != nil {
 		slog.Error("failed to listen and serve", slog.Any("error", err))
 	}
 }
