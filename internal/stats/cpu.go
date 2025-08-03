@@ -12,7 +12,7 @@ type CpuStat struct {
 }
 
 func GetCpuStat(ctx context.Context) (CpuStat, error) {
-	percent, err := cpu.PercentWithContext(ctx, 0, true)
+	percent, err := cpu.PercentWithContext(ctx, 0, false)
 	if err != nil {
 		return CpuStat{}, err
 	}
