@@ -9,6 +9,7 @@ import (
 
 	"connectrpc.com/grpcreflect"
 	"github.com/lmittmann/tint"
+	"github.com/rs/cors"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -40,12 +41,20 @@ func main() {
 	path, handler := statsconnect.NewStatsServiceHandler(s)
 	mux.Handle(path, handler)
 
+	// Add CORS middleware
+	c := cors.New(cors.Options{
+		AllowedMethods: []string{http.MethodGet, http.MethodPost, "OPTIONS"},
+		AllowedHeaders: []string{"*"},
+		AllowedOrigins: []string{"*"},
+	})
+	handlerWithCors := c.Handler(h2c.NewHandler(mux, &http2.Server{}))
+
 	addr := fmt.Sprintf("localhost:%d", PORT)
 	slog.Info("server starting", "addr", addr)
 
 	err := http.ListenAndServe(
 		addr,
-		h2c.NewHandler(mux, &http2.Server{}),
+		handlerWithCors,
 	)
 
 	if err != nil {

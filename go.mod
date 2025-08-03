@@ -7,6 +7,7 @@ require (
 	connectrpc.com/grpcreflect v1.3.0
 	github.com/ethn1ee/pi-protos v1.0.3
 	github.com/lmittmann/tint v1.1.2
+	github.com/rs/cors v1.11.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	golang.org/x/net v0.40.0
 	google.golang.org/protobuf v1.36.6
