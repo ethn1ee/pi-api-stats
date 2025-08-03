@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
-	"net"
+	"net/http"
 	"os"
-	"strconv"
 	"time"
 
+	"connectrpc.com/grpcreflect"
 	"github.com/lmittmann/tint"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 
-	grpchandler "github.com/ethn1ee/pi-api-stats/internal/grpc"
-	pb "github.com/ethn1ee/pi-protos/gen/go/api-stats"
+	"github.com/ethn1ee/pi-api-stats/internal/server"
+	"github.com/ethn1ee/pi-protos/gen/go/stats/statsconnect"
 )
 
 const PORT = 50051
@@ -27,17 +28,27 @@ func main() {
 		}),
 	))
 
-	lis, err := net.Listen("tcp", ":"+strconv.Itoa(PORT))
+	mux := http.NewServeMux()
+
+	// Add reflection
+	reflector := grpcreflect.NewStaticReflector(statsconnect.StatsServiceName)
+	mux.Handle(grpcreflect.NewHandlerV1(reflector))
+	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
+
+	// Add stats service
+	s := &server.Server{}
+	path, handler := statsconnect.NewStatsServiceHandler(s)
+	mux.Handle(path, handler)
+
+	addr := fmt.Sprintf("localhost:%d", PORT)
+	slog.Info("server starting", "addr", addr)
+
+	err := http.ListenAndServe(
+		addr,
+		h2c.NewHandler(mux, &http2.Server{}),
+	)
+
 	if err != nil {
-		slog.Error("failed to listen", slog.Any("error", err))
-	}
-
-	s := grpc.NewServer()
-	pb.RegisterStatsServer(s, &grpchandler.Server{})
-	reflection.Register(s)
-
-	slog.Info("Server starting", "port", PORT)
-	if err := s.Serve(lis); err != nil {
-		slog.Error("failed to serve", slog.Any("error", err))
+		slog.Error("failed to listen and serve", slog.Any("error", err))
 	}
 }
