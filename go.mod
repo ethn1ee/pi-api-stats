@@ -5,7 +5,7 @@ go 1.24.5
 require (
 	connectrpc.com/connect v1.18.1
 	connectrpc.com/grpcreflect v1.3.0
-	github.com/ethn1ee/pi-protos v1.0.4
+	github.com/ethn1ee/pi-protos v1.0.8
 	github.com/lmittmann/tint v1.1.2
 	github.com/rs/cors v1.11.1
 	github.com/shirou/gopsutil/v3 v3.24.5

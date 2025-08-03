@@ -7,8 +7,8 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/ethn1ee/pi-api-stats/internal/stats"
-	pb "github.com/ethn1ee/pi-protos/gen/go/stats"
-	"github.com/ethn1ee/pi-protos/gen/go/stats/statsconnect"
+	pb "github.com/ethn1ee/pi-protos/gen/go/api-stats"
+	statsconnect "github.com/ethn1ee/pi-protos/gen/go/api-stats/api_statsconnect"
 )
 
 type Server struct {
@@ -79,12 +79,14 @@ func (s *Server) StreamHost(
 ) error {
 	return streamStat(ctx, stream, stats.GetHostStat, func(data stats.HostStat) *pb.StreamHostResponse {
 		return &pb.StreamHostResponse{
-			BootTime:     data.BootTime,
-			Uptime:       data.Uptime,
-			Processes:    data.Processes,
-			Os:           data.Os,
-			Platform:     data.Platform,
-			Architecture: data.Architecture,
+			BootTime:        data.BootTime,
+			Uptime:          data.Uptime,
+			Processes:       data.Processes,
+			Os:              data.Os,
+			Platform:        data.Platform,
+			PlatformVersion: data.PlatformVersion,
+			KernelVersion:   data.KernelVersion,
+			Architecture:    data.Architecture,
 		}
 	})
 }

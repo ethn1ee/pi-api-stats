@@ -14,7 +14,7 @@ import (
 	"golang.org/x/net/http2/h2c"
 
 	"github.com/ethn1ee/pi-api-stats/internal/server"
-	"github.com/ethn1ee/pi-protos/gen/go/stats/statsconnect"
+	statsconnect "github.com/ethn1ee/pi-protos/gen/go/api-stats/api_statsconnect"
 )
 
 const PORT = 50051
