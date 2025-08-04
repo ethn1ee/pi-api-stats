@@ -118,3 +118,18 @@ func (s *Server) StreamTemperature(
 		}
 	})
 }
+
+func (s *Server) StreamNetwork(
+	ctx context.Context,
+	req *connect.Request[pb.StreamNetworkRequest],
+	stream *connect.ServerStream[pb.StreamNetworkResponse],
+) error {
+	return streamStat(ctx, stream, stats.GetNetworkStat, func(data stats.NetworkStat) *pb.StreamNetworkResponse {
+		return &pb.StreamNetworkResponse{
+			BytesIn:    data.BytesIn,
+			BytesOut:   data.BytesOut,
+			PacketsIn:  data.PacketsIn,
+			PacketsOut: data.PacketsOut,
+		}
+	})
+}

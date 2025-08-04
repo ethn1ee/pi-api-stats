@@ -5,12 +5,11 @@ go 1.24.5
 require (
 	connectrpc.com/connect v1.18.1
 	connectrpc.com/grpcreflect v1.3.0
-	github.com/ethn1ee/pi-protos v1.0.8
+	github.com/ethn1ee/pi-protos v1.0.15
 	github.com/lmittmann/tint v1.1.2
 	github.com/rs/cors v1.11.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	golang.org/x/net v0.42.0
-	google.golang.org/protobuf v1.36.6
 )
 
 require (
@@ -23,4 +22,5 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
 )

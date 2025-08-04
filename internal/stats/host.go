@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v3/load"
 )
 
 type HostStat struct {
@@ -24,10 +25,15 @@ func GetHostStat(ctx context.Context) (HostStat, error) {
 		return HostStat{}, err
 	}
 
+	load, err := load.MiscWithContext(ctx)
+	if err != nil {
+		return HostStat{}, err
+	}
+
 	return HostStat{
 		BootTime:        infoStat.BootTime,
 		Uptime:          infoStat.Uptime,
-		Processes:       infoStat.Procs,
+		Processes:       uint64(load.ProcsRunning),
 		Os:              infoStat.OS,
 		Platform:        infoStat.Platform,
 		PlatformVersion: infoStat.PlatformVersion,
