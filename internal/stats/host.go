@@ -33,7 +33,7 @@ func GetHostStat(ctx context.Context) (HostStat, error) {
 	return HostStat{
 		BootTime:        infoStat.BootTime,
 		Uptime:          infoStat.Uptime,
-		Processes:       uint64(load.ProcsRunning),
+		Processes:       uint64(load.ProcsTotal),
 		Os:              infoStat.OS,
 		Platform:        infoStat.Platform,
 		PlatformVersion: infoStat.PlatformVersion,
